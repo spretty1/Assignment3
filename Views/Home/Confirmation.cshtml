@@ -1,0 +1,29 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    <!--sets the page of the title-->
+    ViewBag.Title = "Movie Received " + Model.Title;
+
+}
+<!--accesses the model-->
+@model Assignment3.Models.MovieCollection
+
+<div>
+    <!--depending on the movie title impacts the output of the page-->
+    <h2>Your movie has just been added to the collection.</h2>
+    @if (Model.Title.ToUpper() == "INDEPENDENCE DAY")
+    {
+        @:You entered Independence Day and it will not be displayed. 
+    }
+    else
+    {
+        @:Your movie will be displayed within the collection.
+    }
+        <p>Hope you enjoyed the movie!</p>
+</div>
+
+<div>
+    <!-- has a link to the movie collection page -->
+    Click <a asp-action="MovieList">here</a> to see the current movie collection
+</div>
