@@ -6,10 +6,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Assignment3.Models
 {
-    public class MovieCollection
+    public class Movie
     {   
         //setting the different forms of data with some being required and the notes not being allowed to be longer than a certain length
         
+        [Required, Key]
+        public int MovieId { get; set; }
+
         [Required(ErrorMessage = "Category is required.")]
         public string Category { get; set; }
 

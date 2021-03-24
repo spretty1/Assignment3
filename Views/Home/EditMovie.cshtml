@@ -1,33 +1,25 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-    ViewBag.Title = "Movie Form";
-}
-@model Assignment3.Models.Movie
-<!--creates form with associated options-->
-<form asp-action="MovieForm" method="post">
+﻿@model Movie
+<!--provides input fields and populates them so the user can know what they are changing-->
+
+<form asp-action="EditMoviePost" method="post">
     <div asp-validation-summary="All">
-        <div class="alert-dark">
-            <label asp-for="Category">Category:</label>
-            <input asp-for="Category" />
-        </div>
 
         <div class="alert-dark">
-            <label asp-for="Title">Title:</label>
-            <input asp-for="Title" />
+            <label asp-for="Category">Movie Category:</label>
+            <input asp-for="Category" value="@Model.Category" />
         </div>
-
         <div class="alert-dark">
-            <label asp-for="Year">Year:</label>
-            <input asp-for="Year" />
+            <label asp-for="Title">Name of Movie:</label>
+            <input asp-for="Title" value="@Model.Title" />
         </div>
-
+        <div class="alert-dark">
+            <label asp-for="Year">Release Year:</label>
+            <input asp-for="Year" value="@Model.Year" />
+        </div>
         <div class="alert-dark">
             <label asp-for="Director">Director:</label>
-            <input asp-for="Director" />
+            <input asp-for="Director" value="@Model.Director" />
         </div>
-
         <div class="alert-dark">
             <label asp-for="Rating">Rating:</label>
             <select asp-for="Rating">
@@ -38,26 +30,23 @@
                 <option value="R">R</option>
             </select>
         </div>
-
         <div class="alert-dark">
-            <label asp-for="Edited">Edited:</label>
+            <label asp-for="Edited">Has it been edited:</label>
             <select asp-for="Edited">
                 <option value="">Select One</option>
                 <option value="true">Yes</option>
                 <option value="false">No</option>
             </select>
         </div>
-
         <div class="alert-dark">
-            <label asp-for="LentTo">Lent To:</label>
-            <input asp-for="LentTo" />
+            <label asp-for="LentTo">Lent to:</label>
+            <input asp-for="LentTo" value="@Model.LentTo" />
         </div>
-
         <div class="alert-dark">
             <label asp-for="Notes">Notes:</label>
-            <input asp-for="Notes" />
+            <input asp-for="Notes" value="@Model.Notes" />
         </div>
-
-        <button type="submit" class="btn btn-primary">Add Movie to Collection</button>
     </div>
+    <button type="submit" class="btn btn-primary">Submit your changes!</button>
 </form>
+

@@ -1,4 +1,6 @@
 ﻿using Assignment3.Models;
+using Assignment3.Models.ViewModels;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,10 +14,16 @@ namespace Assignment3.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        public IApplicationBuilder _app; 
+        private IMovieRepository _repository;
+        private MovieDbContext context { get; set; }
 
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(ILogger<HomeController> logger, IMovieRepository repository, MovieDbContext con)
         {
             _logger = logger;
+            _repository = repository;
+            context = con; 
         }
         //set the action to access the index view 
         public IActionResult Index()
@@ -35,13 +43,13 @@ namespace Assignment3.Controllers
         }
         //set the action to access the movie form view for posting information, sends user to confirmation page 
         [HttpPost]
-        public IActionResult MovieForm(MovieCollection appResponse)
+        public IActionResult MovieForm(Movie movie)
         {
             if(ModelState.IsValid)
             { 
-                TempStorage.AddMovie(appResponse);
-
-                return View("Confirmation", appResponse);
+                context.Movies.Add(movie);
+                context.SaveChanges();
+                return View("Confirmation", movie);
             }
             else
             {
@@ -49,9 +57,47 @@ namespace Assignment3.Controllers
             }
         }
         //shows the user the movie collection excluding independence day
+       [HttpGet]
         public IActionResult MovieList()
         {
-            return View(TempStorage.Movies.Where(r => r.Title != "Independence Day" ));
+            return View("MovieList", new MovieListViewModel
+            {
+                Movies = _repository.Movies.Where(r => r.Title != "Independence Day")
+            });
+        }
+
+        //allows the user to delete a record
+        public IActionResult Delete(Movie movie)
+        {
+            context.Movies.Remove(movie);
+            context.SaveChanges();
+
+            return View("MovieList", new MovieListViewModel
+            {
+                Movies = _repository.Movies.Where(r => r.Title != "Independence Day")
+            });
+        }
+
+        //sends the user to the edit form view to edit a movie, along with the movie info 
+        [HttpGet]
+        public IActionResult EditMovie(Movie movie)
+        {
+
+                //Bring in the schedule of availability
+                return View("EditMovie", movie);
+        }
+
+        //saves what the user changed and updates the database
+        [HttpPost]
+        public IActionResult EditMoviePost(Movie movie)
+        {
+            context.Movies.Update(movie);
+
+            context.SaveChanges();
+            return View("MovieList", new MovieListViewModel
+            {
+                Movies = _repository.Movies.Where(r => r.Title != "Independence Day")
+            });
         }
 
         public IActionResult Privacy()
